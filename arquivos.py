@@ -20,6 +20,31 @@ def frequenciaPalavras(listaPalavras):
         frequencia_palavras[palavra] += 1
     return frequencia_palavras
 
-print(f'{len(limpaTexto(texto))} caracteres carregadas após limpeza.')
-print(f'{len(listaPalavras(limpaTexto(texto)))} palavras carregadas.')
-print(f'{len(frequenciaPalavras(listaPalavras(limpaTexto(texto))))} palavras únicas carregadas.')
+def consultaPalavras(frequencia):
+    palavra = input('Palavra: ')
+    return (f"{palavra} aparece {frequencia.get(palavra,0)} vezes no texto.")
+
+def ordenaPalavras(frequencia):
+    from operator import itemgetter
+    top_palavras = sorted(frequencia.items(), key=itemgetter(1), reverse=True)
+    for palavra, qtde in top_palavras[:30]:
+        print (f"{palavra}: {qtde}")
+
+def frequenciaLetras(texto):
+    from collections import Counter
+    letras = [c for c in texto if c.isalpha()]
+    frequencia_letras = Counter(letras)
+    return frequencia_letras
+
+textoLimpo = limpaTexto(texto)
+palavras = listaPalavras(textoLimpo)
+frequencia = frequenciaPalavras(palavras)
+frequenciaL = frequenciaLetras(texto)
+
+#print(f'{len(textoLimpo)} caracteres carregadas após limpeza.')
+#print(f'{len(palavras)} palavras carregadas.')
+#print(f'{len(frequencia)} palavras únicas carregadas.')
+#print(f'{consultaPalavras(frequencia)}')
+#print(f'{ordenaPalavras(frequencia)}')
+print(f'{frequenciaL.most_common()}')
+
