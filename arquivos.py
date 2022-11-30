@@ -1,6 +1,11 @@
-import matplotlib.pyplot as plt
 with open('sherlock.txt', encoding='utf8') as file:
-    texto = file.read().lower()
+    textoSherlock = file.read().lower()
+    
+with open('machado.txt', encoding='utf8') as file:
+    textoMachado = file.read().lower()
+
+with open('cervantes.txt', encoding='utf8') as file:
+    textoCervantes = file.read().lower()
 
 
 def limpaTexto(texto):
@@ -44,19 +49,47 @@ def frequenciaLetras(texto):
     return frequencia_letras
 
 
-textoLimpo = limpaTexto(texto)
-palavras = listaPalavras(textoLimpo)
-frequencia = frequenciaPalavras(palavras)
-frequenciaL = frequenciaLetras(texto)
-letrasMaisComum = frequenciaL.most_common(15)
 #print(f'{len(textoLimpo)} caracteres carregadas após limpeza.')
 #print(f'{len(palavras)} palavras carregadas.')
 #print(f'{len(frequencia)} palavras únicas carregadas.')
-# print(f'{consultaPalavras(frequencia)}')
-# print(f'{ordenaPalavras(frequencia)}')
-print(f'{letrasMaisComum}')
+#print(f'{consultaPalavras(frequencia)}')
+#print(f'{ordenaPalavras(frequencia)}')
+#textoLimpo = limpaTexto(texto)
+#palavras = listaPalavras(textoLimpo)
+#frequencia = frequenciaPalavras(palavras)
 
-rotulos, valores = zip(*letrasMaisComum)
-plt.title('Frequência de letras em inglês')
-plt.bar(rotulos, valores)
+
+qtdePalavras = 5
+frequenciaLetraSherlock = frequenciaLetras(textoSherlock)
+letrasMaisComumSherlock  = frequenciaLetraSherlock.most_common(qtdePalavras)
+frequenciaLetraMachado = frequenciaLetras(textoMachado)
+letrasMaisComumMachado = frequenciaLetraMachado.most_common(qtdePalavras)
+frequenciaLetraCervantes = frequenciaLetras(textoCervantes)
+letrasMaisComumCervantes = frequenciaLetraCervantes.most_common(qtdePalavras)
+
+print(f'{letrasMaisComumMachado}, \n {letrasMaisComumSherlock}, \n {letrasMaisComumCervantes}')
+
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+rotulosS, valoresS = zip(*letrasMaisComumSherlock)
+rotulosM, valoresM = zip(*letrasMaisComumMachado)
+rotulosC, valoresC = zip(*letrasMaisComumCervantes)
+labels = [str('      '+rotulosM[n]+'    '+rotulosS[n]+'    '+rotulosC[n]) for n in range(qtdePalavras)]
+x = np.arange(len(labels))
+width = 0.25
+fig, ax = plt.subplots()
+rects1 = ax.bar(x - width/2, valoresS, width, label='Inglês')
+rects2 = ax.bar(x + width/2, valoresM, width, label='Português')
+rects3 = ax.bar(x + width/2 + 0.25, valoresC, width, label='Espanhol')
+
+ax.set_ylabel('Quantidade')
+ax.set_title('Mais Comuns')
+ax.set_xticks(x, labels)
+ax.legend()
+ax.bar_label(rects1, padding=3)
+ax.bar_label(rects2, padding=3)
+ax.bar_label(rects3, padding=3)
+fig.tight_layout()
 plt.show()
